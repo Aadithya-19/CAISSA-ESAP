@@ -1,0 +1,47 @@
+[project]
+name = "caissa"
+version = "0.1.0"
+description = "NNUE chess evaluation in FPGA fabric"
+channels = ["conda-forge"]
+# windows works for ML only. RTL needs WSL2.
+platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
+
+[dependencies]
+python = "3.12.*"
+
+[feature.ml.dependencies]
+numpy = ">=2.0,<3"
+python-chess = ">=1.11"   # import chess
+pytest = ">=8.0"
+
+[feature.rtl.dependencies]
+cocotb = ">=1.9"
+pytest = ">=8.0"
+make = "*"
+
+# thinlinc has 5.026, pin to match once checked
+[feature.rtl.target.linux-64.dependencies]
+verilator = ">=5.020,<6"
+yosys = ">=0.40"
+gtkwave = "*"
+
+[feature.rtl.target.osx-arm64.dependencies]
+verilator = ">=5.020,<6"
+yosys = ">=0.40"
+
+[feature.rtl.target.osx-64.dependencies]
+verilator = ">=5.020,<6"
+yosys = ">=0.40"
+
+[environments]
+default = ["ml", "rtl"]
+ml = ["ml"]
+rtl = ["rtl"]
+
+[tasks]
+test = { cmd = "make", cwd = "onload/hardware" }
+test-width = { cmd = "make WIDTH=12", cwd = "onload/hardware" }   # catches hardcoded 8s
+lint = { cmd = "make lint", cwd = "onload/hardware" }
+waves = { cmd = "make waves", cwd = "onload/hardware" }
+ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
+estimate = "yosys -p 'read_verilog -sv rtl/*.sv; synth_xilinx -family xc7; stat'"
