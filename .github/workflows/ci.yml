@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  rtl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: prefix-dev/setup-pixi@v0.10.2
+
+      - name: lint
+        run: pixi run verilator --lint-only -Wall onload/hardware/solution/stp_sr.sv
+
+      # stp_sr.sv is the unfilled exercise and is meant to fail, so CI runs
+      # the reference instead. what's being checked is the testbench and the
+      # toolchain, not a member's homework.
+      - name: lesson 02
+        run: pixi run make -C onload/hardware solution
+
+      - name: lesson 02 at width 12
+        run: pixi run make -C onload/hardware solution WIDTH=12

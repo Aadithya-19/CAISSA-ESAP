@@ -6,9 +6,9 @@ MODULE   := test_stp_sr
 TOPLEVEL := stp_sr
 
 ifeq ($(MAKECMDGOALS),solution)
-  VERILOG_SOURCES := $(PWD)/solution/stp_sr.sv
+  VERILOG_SOURCES := $(CURDIR)/solution/stp_sr.sv
 else
-  VERILOG_SOURCES := $(PWD)/stp_sr.sv
+  VERILOG_SOURCES := $(CURDIR)/stp_sr.sv
 endif
 
 COMPILE_ARGS += -GWIDTH=$(WIDTH)
@@ -26,7 +26,7 @@ include $(shell cocotb-config --makefiles)/Makefile.sim
 .PHONY: lint waves solution
 
 lint:
-	verilator --lint-only -Wall -GWIDTH=$(WIDTH) stp_sr.sv
+	verilator --lint-only -Wall -GWIDTH=$(WIDTH) $(CURDIR)/stp_sr.sv
 
 waves:
 	$(MAKE) WAVES=1
