@@ -1,0 +1,38 @@
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# pixi - pixi.lock is committed on purpose
+.pixi/
+
+# cocotb / verilator
+sim_build/
+obj_dir/
+results.xml
+*.vcd
+*.fst
+*.fst.hier
+
+# vivado
+.Xil/
+*.jou
+*.log
+*.str
+*.xpr
+*.cache/
+*.gen/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.bit
+
+# kicad
+*-backups/
+*.kicad_prl
+fp-info-cache
+
+# os
+.DS_Store
+Thumbs.db
