@@ -42,5 +42,7 @@ def run(toplevel, sources, parameters=None, waves=False):
         parameters=parameters,
         build_dir=build_dir,
         test_dir=TB,
+        # without this cocotb drops a "<testname>.None" file next to the tests
+        results_xml=str(build_dir / "results.xml"),
         waves=waves,
     )

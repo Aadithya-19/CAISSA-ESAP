@@ -1,28 +1,33 @@
-> Replace every @handle below with the real GitHub username.
-> Everyone listed must have write access or the auto-request silently does nothing.
-> Last match wins, so keep the catch-all on line 1.
+# Replace every @handle below with the real GitHub username.
+# Everyone listed must have write access or the auto-request silently does nothing.
+# Last match wins, so keep the catch-all on line 1.
+#
+# Rules whose owners are still placeholders are commented out. An unknown
+# handle makes GitHub reject the whole file, and setup-repo.sh turns on
+# require_code_owner_reviews, so a broken file here blocks every PR.
+# Uncomment each line as you learn the real username.
 
-*                       @Aadithya-19 @abhiraj-handle
+*                       @Aadithya-19 @Astromonkey2
 
-/ml/                    @arvind-handle @aadithya-19
-/ml/quantize/           @ilim-handle @arvind-handle
-/ml/eval/               @kim-handle
+# /ml/                  @arvind-handle @Aadithya-19
+# /ml/quantize/         @ilim-handle @arvind-handle
+# /ml/eval/             @kim-handle
 
-/rtl/                   @kade-handle @abhiraj-handle
-/rtl/nnue/              @dhruv-handle @kade-handle
-/rtl/sense/             @hieu-handle @kade-handle
-/rtl/tb/                @jasmine-handle
+/rtl/                   @Astromonkey2
+# /rtl/nnue/            @dhruv-handle @kade-handle
+# /rtl/sense/           @hieu-handle @kade-handle
+# /rtl/tb/              @jasmine-handle
 
-/hw/sense-board/        @giuseppe-handle
-/hw/driver-board/       @gabe-handle
-/hw/mounting/           @leo-handle
+# /hw/sense-board/      @giuseppe-handle
+# /hw/driver-board/     @gabe-handle
+# /hw/mounting/         @leo-handle
 
 /mech/                  @Aadithya-19
-/mech/gantry/           @amy-handle @Aadithya-19
-/mech/motion/           @adithya-handle @Aadithya-19
+# /mech/gantry/         @amy-handle @Aadithya-19
+# /mech/motion/         @adithya-handle @Aadithya-19
 
-/docs/eval-spec.md              @kim-handle @Aadithya-19
+# /docs/eval-spec.md    @kim-handle @Aadithya-19
 /docs/mechanical-constraints.md @Aadithya-19
-/docs/port-contracts.md         @Aadithya-19 @abhiraj-handle
+/docs/port-contracts.md         @Aadithya-19 @Astromonkey2
 
 /.github/               @Aadithya-19
