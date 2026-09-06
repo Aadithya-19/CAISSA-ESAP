@@ -1,30 +1,38 @@
-# CAISSA
+SHELL = /bin/bash
+
+# Run these inside the pixi env:  pixi shell -e rtl
 #
-#   make new NAME=mac_array        scaffold a module + its testbench
-#   make new NAME=foo DIR=nnue     same, under rtl/nnue/
-#   make test                      run everything
-#   make test NAME=mac_array       run one module
-#   make waves NAME=mac_array      same, dump an FST
-#   make lint                      verilator lint over rtl/
-#   make lesson                    check the onboarding lesson still passes
+#   make module_foo    new module + testbench (add SUB_DIR=nnue to nest it)
+#   make test          run every testbench
+#   make test_foo      run one
+#   make waves_foo     run one, dump an FST
+#   make lint          verilator over rtl/
+#   make lesson        check the onboarding lesson still passes
+#   make clean
 
-NAME ?=
-DIR  ?=
+SUB_DIR ?=
+LINT_INC := $(addprefix -y ,$(shell find rtl -type d 2>/dev/null))
 
-RTL_DIRS := $(shell find rtl -type d 2>/dev/null)
-LINT_INC := $(addprefix -y ,$(RTL_DIRS))
-SELECT   := $(if $(NAME),-k $(NAME),)
+.DEFAULT_GOAL := help
+.PHONY: help test waves lint lesson clean
 
-.PHONY: new test waves lint lesson clean
+help:
+	@sed -n 's/^#   //p' Makefile
 
-new:
-	@scripts/new.sh "$(NAME)" "$(DIR)"
+module_%:
+	@bash scripts/new.sh "$*" "$(SUB_DIR)"
 
 test:
-	pytest tb/ $(SELECT)
+	pytest tb/
+
+test_%:
+	pytest tb/ -k "$*"
 
 waves:
-	pytest tb/ $(SELECT) --waves
+	pytest tb/ --waves
+
+waves_%:
+	pytest tb/ -k "$*" --waves
 
 lint:
 	@for f in $$(find rtl -name '*.sv'); do \
@@ -33,7 +41,7 @@ lint:
 	done
 
 lesson:
-	$(MAKE) -C onload/hardware solution
+	@$(MAKE) --no-print-directory -C onload/hardware solution
 
 clean:
-	rm -rf sim_build .pytest_cache
+	rm -rf sim_build .pytest_cache onload/hardware/sim_build

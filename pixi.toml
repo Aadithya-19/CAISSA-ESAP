@@ -33,10 +33,10 @@ yosys = ">=0.40"
 gtkwave = "*"              # linux only on conda-forge
 
 [feature.rtl.tasks]
-test = "pytest tb/"
+test = "make test"
 lint = "make lint"
-waves = "pytest tb/ --waves"
-lesson = { cmd = "make solution", cwd = "onload/hardware" }
+waves = "make waves"
+lesson = "make lesson"
 estimate = "yosys -p 'read_verilog -sv rtl/*/*.sv; synth_xilinx -family xc7; stat'"
 
 [environments]
