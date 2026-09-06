@@ -1,33 +1,30 @@
-# Replace every @handle below with the real GitHub username.
-# Everyone listed must have write access or the auto-request silently does nothing.
-# Last match wins, so keep the catch-all on line 1.
-#
-# Rules whose owners are still placeholders are commented out. An unknown
-# handle makes GitHub reject the whole file, and setup-repo.sh turns on
-# require_code_owner_reviews, so a broken file here blocks every PR.
-# Uncomment each line as you learn the real username.
+# TODO: still missing real handles for Dhruv, Anya, Leo, Amy — placeholders below
+# marked FIXME. Update the moment they reply, or those lines route to nobody.
 
-*                       @Aadithya-19 @Astromonkey2
+*                       @Aadithya-19 @abhiraj-handle
 
-# /ml/                  @arvind-handle @Aadithya-19
-# /ml/quantize/         @ilim-handle @arvind-handle
-# /ml/eval/             @kim-handle
+/ml/                    @ArvindS2313 @Aadithya-19
+/ml/quantize/           @ilim-stankulov @ArvindS2313
+/ml/eval/               @kim4712
 
-/rtl/                   @Astromonkey2
-# /rtl/nnue/            @dhruv-handle @kade-handle
-# /rtl/sense/           @hieu-handle @kade-handle
-# /rtl/tb/              @jasmine-handle
+/rtl/                   @Kade-Zisko @abhiraj-handle
+/rtl/nnue/              @FIXME-dhruv @Kade-Zisko
+/rtl/sense/             @chihieugithub @Kade-Zisko
+/rtl/tb/                @tseng104
 
-# /hw/sense-board/      @giuseppe-handle
-# /hw/driver-board/     @gabe-handle
-# /hw/mounting/         @leo-handle
+/hw/sense-board/        @T1M1D0
+/hw/driver-board/       @Gabo7211
+/hw/mounting/           @FIXME-leo
 
 /mech/                  @Aadithya-19
-# /mech/gantry/         @amy-handle @Aadithya-19
-# /mech/motion/         @adithya-handle @Aadithya-19
+/mech/gantry/           @FIXME-amy @Aadithya-19
+/mech/motion/           @solo6760 @Aadithya-19
 
-# /docs/eval-spec.md    @kim-handle @Aadithya-19
+/docs/eval-spec.md              @kim4712 @Aadithya-19
 /docs/mechanical-constraints.md @Aadithya-19
-/docs/port-contracts.md         @Aadithya-19 @Astromonkey2
+/docs/port-contracts.md         @Aadithya-19 @abhiraj-handle
 
 /.github/               @Aadithya-19
+
+# note: @FIXME-anya not yet placed on a path — she owns embedded broadly,
+# add her once you know which sub-area (sense board vs firmware) she lands on
