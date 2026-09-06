@@ -1,30 +1,18 @@
 # TODO: still missing real handles for Dhruv, Anya, Leo, Amy — placeholders below
 # marked FIXME. Update the moment they reply, or those lines route to nobody.
 
-*                       @Aadithya-19 @abhiraj-handle
+*                       @Aadithya-19 @Astromonkey2
 
-/ml/                    @ArvindS2313 @Aadithya-19
-/ml/quantize/           @ilim-stankulov @ArvindS2313
-/ml/eval/               @kim4712
+/ml/                    @ArvindS2313 @Aadithya-19 @ishikapandura @ilim-stankulov
 
-/rtl/                   @Kade-Zisko @abhiraj-handle
-/rtl/nnue/              @FIXME-dhruv @Kade-Zisko
-/rtl/sense/             @chihieugithub @Kade-Zisko
-/rtl/tb/                @tseng104
+/rtl/                   @Kade-Zisko @Astromonkey2 @chihieugithub @tseng104
 
-/hw/sense-board/        @T1M1D0
-/hw/driver-board/       @Gabo7211
-/hw/mounting/           @FIXME-leo
+/embedded/              @T1M1D0 @Gabo7211
 
-/mech/                  @Aadithya-19
-/mech/gantry/           @FIXME-amy @Aadithya-19
-/mech/motion/           @solo6760 @Aadithya-19
+/mech/                  @Aadithya-19 @solo6760 @Astromonkey2
 
-/docs/eval-spec.md              @kim4712 @Aadithya-19
+/docs/eval-spec.md              @solo6760 @Aadithya-19
 /docs/mechanical-constraints.md @Aadithya-19
-/docs/port-contracts.md         @Aadithya-19 @abhiraj-handle
+/docs/port-contracts.md         @Aadithya-19 @Astromonkey2
 
 /.github/               @Aadithya-19
-
-# note: @FIXME-anya not yet placed on a path — she owns embedded broadly,
-# add her once you know which sub-area (sense board vs firmware) she lands on
