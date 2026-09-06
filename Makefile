@@ -37,7 +37,7 @@ waves_%:
 lint:
 	@for f in $$(find rtl -name '*.sv'); do \
 	  echo "lint $$f"; \
-	  verilator --lint-only -Wall $(LINT_INC) "$$f" || exit 1; \
+	  verilator --lint-only -Wall -Wno-UNUSEDSIGNAL -Wno-UNUSEDPARAM $(LINT_INC) "$$f" || exit 1; \
 	done
 
 lesson:

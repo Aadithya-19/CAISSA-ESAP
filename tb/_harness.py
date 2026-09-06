@@ -15,7 +15,10 @@ RTL = TB.parent / "rtl"
 
 # verilator is 2-state, so an unreset register reads 0 instead of X and a
 # missing reset passes by accident. these make it fail instead.
-BUILD_ARGS = ["--x-assign", "unique", "--x-initial", "unique", "-Wall"]
+# -Wall minus the two that fire on a half-written module. a freshly
+# generated skeleton has to compile or nobody can get started.
+BUILD_ARGS = ["--x-assign", "unique", "--x-initial", "unique", "-Wall",
+              "-Wno-UNUSEDSIGNAL", "-Wno-UNUSEDPARAM"]
 
 
 def run(toplevel, sources, parameters=None, waves=False):

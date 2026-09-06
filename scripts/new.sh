@@ -33,4 +33,4 @@ echo "  rtl/$REL"
 echo "  tb/${NAME}_tb.py"
 echo "  tb/test_${NAME}.py"
 echo
-echo "next: fill in the ports, then  make test NAME=$NAME"
+echo "next: fill in the ports, then  make test_$NAME"
