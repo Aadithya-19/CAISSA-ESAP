@@ -23,7 +23,7 @@ module_%:
 	@bash scripts/new.sh "$*" "$(SUB_DIR)"
 
 test:
-	pytest tb/
+	@pytest tb/; s=$$?; if [ $$s -eq 5 ]; then echo "no testbenches yet"; else exit $$s; fi
 
 test_%:
 	pytest tb/ -k "$*"
