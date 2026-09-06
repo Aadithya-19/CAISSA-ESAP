@@ -1,5 +1,8 @@
 Lesson 02 — Serial to Parallel Shift Register
 
+Run everything below inside the environment: `pixi shell -e rtl` first,
+or prefix each command with `pixi run -e rtl`.
+
 ~45 min. You build stp_sr.sv, the register that reassembles our 64 sensor bits.
 
 Open stp_sr.sv, fill in the two holes.

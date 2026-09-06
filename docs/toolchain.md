@@ -9,7 +9,7 @@ Install [pixi](https://pixi.sh), then:
 ```bash
 git clone https://github.com/Aadithya-19/CAISSA-ESAP.git
 cd CAISSA-ESAP
-pixi install
+pixi install -e rtl
 pixi run lesson
 ```
 
@@ -17,15 +17,28 @@ Everything installs inside the repo folder. It doesn't touch the rest of your ma
 
 ### Windows
 
-If you'll be writing SystemVerilog or working on RTL, run:
+Testbenches run inside WSL, not PowerShell.
 
 ```
 wsl --install
 ```
 
-Verilator has no Windows build. Needs admin once, then clone and `pixi install` inside WSL.
+Once, needs admin, then reboot. After that `wsl` drops you into Ubuntu.
 
-Python-only work runs on Windows as-is.
+cocotb has no Windows build, so the simulation flow lives in WSL. Verilator
+itself does run on Windows, but there's no reason to split the toolchain.
+
+Vivado is the other way round - it's Windows only on ECN, so synthesis and
+programming the board happen natively, outside WSL. See the Vivado section.
+
+Python-only ML work runs on Windows as-is.
+
+Clone into your Linux home, not `/mnt/c`. Reading across into the Windows
+filesystem is slow enough that Verilator compiles crawl.
+
+```bash
+cd ~ && git clone https://github.com/Aadithya-19/CAISSA-ESAP.git
+```
 
 No admin on your laptop? Use Codespaces from the green Code button on the repo.
 
@@ -71,3 +84,33 @@ Programming the Arty needs USB, so it happens on a lab machine. One board, sched
 | Mechanical | KiCad — free download or ThinLinc |
 
 Plus Vivado for whoever runs synthesis.
+
+## When it breaks
+
+**"Catastrophic failure" from `wsl`** - the WSL VM is in a bad state, usually
+after a Windows update.
+
+```
+wsl --shutdown
+```
+
+then `wsl` again.
+
+**curl hangs forever in WSL with no error** - you're on the Purdue VPN. Cisco
+AnyConnect takes routing priority (metric 1) over the WSL adapter (metric 5000),
+so WSL has a working gateway and no route out. DNS resolves, nothing connects.
+
+Disconnect AnyConnect, or create a `.wslconfig` in your Windows home directory
+containing:
+
+```
+[wsl2]
+networkingMode=mirrored
+```
+
+then `wsl --shutdown`. Mirrored mode shares the Windows network stack, VPN
+included. It can occasionally upset Docker Desktop.
+
+**`pixi run lesson` says the environment isn't available** - you're on native
+Windows or an Apple Silicon Mac. cocotb only ships linux-64 and osx-64 on
+conda-forge. Use WSL2 or ThinLinc.
