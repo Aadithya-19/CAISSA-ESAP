@@ -10,23 +10,26 @@ python = "3.12.*"
 
 [feature.ml.dependencies]
 numpy = ">=2.0,<3"
-python-chess = ">=1.11"   # import chess
+chess = ">=1.11"
 pytest = ">=8.0"
 
 [feature.ml.tasks]
 ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
 
-# neither cocotb nor verilator ships for windows. RTL work happens in WSL2.
+# cocotb only ships linux-64 and osx-64 on conda-forge. no windows, no apple
+# silicon - both of those do RTL work in WSL2 or on ThinLinc.
 [feature.rtl]
-platforms = ["linux-64", "osx-arm64", "osx-64"]
+platforms = ["linux-64", "osx-64"]
 
 [feature.rtl.dependencies]
-cocotb = ">=1.9"
+cocotb = ">=1.9,<2"        # 2.x renames units= and drops the makefile flow
 pytest = ">=8.0"
 make = "*"
 verilator = ">=5.020,<6"   # thinlinc has 5.026, pin to match once checked
 yosys = ">=0.40"
-gtkwave = "*"
+
+[feature.rtl.target.linux-64.dependencies]
+gtkwave = "*"              # linux only on conda-forge
 
 [feature.rtl.tasks]
 test = { cmd = "make", cwd = "onload/hardware" }
