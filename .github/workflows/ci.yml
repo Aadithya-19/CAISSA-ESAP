@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  rtl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          environments: rtl
+
+      - name: lint
+        run: pixi run lint
+
+      - name: tests
+        run: pixi run test
+
+      # a broken onboarding lesson blocks every new member, so it fails CI too
+      - name: lesson
+        run: pixi run lesson

@@ -1,0 +1,8 @@
+import pytest
+
+from _harness import RTL, run
+
+
+@pytest.mark.parametrize("width", [8, 12])
+def test___NAME__(width, waves):
+    run("__NAME__", [RTL / "__PATH__"], {"WIDTH": width}, waves)

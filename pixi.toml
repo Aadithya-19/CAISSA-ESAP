@@ -1,9 +1,8 @@
-[project]
+[workspace]
 name = "caissa"
 version = "0.1.0"
 description = "NNUE chess evaluation in FPGA fabric"
 channels = ["conda-forge"]
-# windows works for ML only. RTL needs WSL2.
 platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
 
 [dependencies]
@@ -11,37 +10,35 @@ python = "3.12.*"
 
 [feature.ml.dependencies]
 numpy = ">=2.0,<3"
-python-chess = ">=1.11"   # import chess
+chess = ">=1.11"
 pytest = ">=8.0"
+
+[feature.ml.tasks]
+ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
+
+# cocotb only ships linux-64 and osx-64 on conda-forge. no windows, no apple
+# silicon - both of those do RTL work in WSL2 or on ThinLinc.
+[feature.rtl]
+platforms = ["linux-64", "osx-64"]
 
 [feature.rtl.dependencies]
-cocotb = ">=1.9"
+cocotb = ">=1.9,<2"        # 2.x renames units= and drops the makefile flow
 pytest = ">=8.0"
+pytest-xdist = ">=3.0"     # pytest -n auto
 make = "*"
+verilator = ">=5.020,<6"   # thinlinc has 5.026, pin to match once checked
+yosys = ">=0.40"
 
-# thinlinc has 5.026, pin to match once checked
 [feature.rtl.target.linux-64.dependencies]
-verilator = ">=5.020,<6"
-yosys = ">=0.40"
-gtkwave = "*"
+gtkwave = "*"              # linux only on conda-forge
 
-[feature.rtl.target.osx-arm64.dependencies]
-verilator = ">=5.020,<6"
-yosys = ">=0.40"
-
-[feature.rtl.target.osx-64.dependencies]
-verilator = ">=5.020,<6"
-yosys = ">=0.40"
+[feature.rtl.tasks]
+test = "make test"
+lint = "make lint"
+waves = "make waves"
+lesson = "make lesson"
+estimate = "yosys -p 'read_verilog -sv rtl/*/*.sv; synth_xilinx -family xc7; stat'"
 
 [environments]
-default = ["ml", "rtl"]
-ml = ["ml"]
+default = ["ml"]
 rtl = ["rtl"]
-
-[tasks]
-test = { cmd = "make", cwd = "onload/hardware" }
-test-width = { cmd = "make WIDTH=12", cwd = "onload/hardware" }   # catches hardcoded 8s
-lint = { cmd = "make lint", cwd = "onload/hardware" }
-waves = { cmd = "make waves", cwd = "onload/hardware" }
-ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
-estimate = "yosys -p 'read_verilog -sv rtl/*.sv; synth_xilinx -family xc7; stat'"
