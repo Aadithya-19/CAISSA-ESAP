@@ -1,0 +1,13 @@
+"""
+Testbench for rtl/__PATH__.
+
+Read widths off the ports with len(). test___NAME__.py builds this at 8 and 12,
+and hardcoding a width is exactly what that catches.
+"""
+
+import cocotb
+
+
+@cocotb.test()
+async def test_TODO(dut):
+    raise NotImplementedError

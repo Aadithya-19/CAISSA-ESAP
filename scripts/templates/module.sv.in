@@ -1,0 +1,15 @@
+/*
+rtl/__PATH__ - TODO
+*/
+
+module __NAME__ #(
+    parameter int WIDTH = 8   // the TB builds this at 8 and 12. don't hardcode.
+) (
+    input  logic clk,
+    input  logic rst_n        // ACTIVE LOW
+    // TODO ports
+);
+
+    // TODO
+
+endmodule
