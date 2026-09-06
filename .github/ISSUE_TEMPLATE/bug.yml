@@ -1,0 +1,30 @@
+name: Bug
+description: Something built is behaving wrong
+title: "[track] what is broken"
+labels: ["type:bug"]
+body:
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options: [ml, rtl, embedded, mech, tooling]
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Commit hash, command, board revision, or test vector index.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Waveform, ILA capture, scope photo, failing vector, log paste.
