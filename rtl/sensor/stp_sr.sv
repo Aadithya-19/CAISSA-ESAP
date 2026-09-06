@@ -29,7 +29,7 @@ module stp_sr #(
         if (!rst_n)
             parallel_out <= {WIDTH{1'b0}};
         else if (shift_en)
-            parallel_out <= {parallel_out[WIDTH-2:0], serial_in};
+            parallel_out <= {parallel_out[6:0], serial_in};  // TEMP: hardcoded for 8
         // shift_en low gets no branch. a flop you don't assign holds on its own.
     end
 
