@@ -16,13 +16,11 @@ jobs:
           environments: rtl
 
       - name: lint
-        run: pixi run lint-solution
+        run: pixi run lint
 
-      # stp_sr.sv is the unfilled exercise and is meant to fail, so CI runs
-      # the reference instead. what's being checked is the testbench and the
-      # toolchain, not a member's homework.
-      - name: lesson 02
-        run: pixi run check
+      - name: tests
+        run: pixi run test
 
-      - name: lesson 02 at width 12
-        run: pixi run check-width
+      # a broken onboarding lesson blocks every new member, so it fails CI too
+      - name: lesson
+        run: pixi run lesson

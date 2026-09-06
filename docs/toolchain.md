@@ -10,7 +10,7 @@ Install [pixi](https://pixi.sh), then:
 git clone https://github.com/Aadithya-19/CAISSA-ESAP.git
 cd CAISSA-ESAP
 pixi install
-pixi run test
+pixi run lesson
 ```
 
 Everything installs inside the repo folder. It doesn't touch the rest of your machine, and deleting the clone removes it.
