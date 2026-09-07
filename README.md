@@ -17,8 +17,6 @@ Raspberry-Pi-based self-playing boards this replaces.
 We are not faster than Stockfish at playing chess. An engine is roughly 90% search
 and 10% evaluation arithmetic. We accelerate the arithmetic.
 
-The honest sentence is "CAISSA scores chess positions faster and at lower power
-than a general-purpose processor." Not "CAISSA plays chess faster."
 
 ## Getting started
 
