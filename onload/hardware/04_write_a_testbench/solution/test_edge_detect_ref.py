@@ -30,11 +30,19 @@ async def step(dut):
     return int(dut.rise.value)
 
 
+async def count_pulses(dut, cycles):
+    """how many of the next `cycles` clocks had rise high"""
+    total = 0
+    for _ in range(cycles):
+        total += await step(dut)
+    return total
+
+
 @cocotb.test()
 async def test_pulses_on_rising_edge(dut):
     await start(dut)
     dut.din.value = 1
-    high = sum(await step(dut) for _ in range(4))
+    high = await count_pulses(dut, 4)
     assert high == 1, f"expected exactly one cycle of rise, saw {high}"
 
 
@@ -43,7 +51,7 @@ async def test_ignores_a_held_high_input(dut):
     """the whole reason the module exists"""
     await start(dut)
     dut.din.value = 1
-    high = sum(await step(dut) for _ in range(10))
+    high = await count_pulses(dut, 10)
     assert high == 1, (
         f"din held high for 10 clocks, rise fired {high} times. "
         "a module that just wires rise to din would also 'pass' a weaker test."
@@ -57,7 +65,7 @@ async def test_ignores_the_falling_edge(dut):
     for _ in range(3):
         await step(dut)
     dut.din.value = 0
-    high = sum(await step(dut) for _ in range(4))
+    high = await count_pulses(dut, 4)
     assert high == 0, f"falling edge should be ignored, rise fired {high} times"
 
 
@@ -81,7 +89,7 @@ async def test_reset_clears_history(dut):
     dut.rst_n.value = 1
     await Timer(1, units="ns")
 
-    high = sum(await step(dut) for _ in range(3))
+    high = await count_pulses(dut, 3)
     assert high == 1, (
         f"expected one pulse after reset released with din high, saw {high}"
     )

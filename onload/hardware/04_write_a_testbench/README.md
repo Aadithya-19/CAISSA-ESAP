@@ -36,8 +36,10 @@ Timer after an edge before reading an output, so the value has settled.
 Driving — `dut.din.value = 1`. Reading — `int(dut.rise.value)`. The `int()`
 matters; comparing the raw handle does not do what you expect.
 
-Counting, not checking — `sum(...)` over several cycles tells you how many
-times something fired. "It went high" is a weaker claim than "it went high
+Counting, not checking — add up an output over several cycles to see how
+many times it fired. Note you cannot write `sum(await ... for ...)`; awaiting
+inside a generator expression makes an async generator, which sum() refuses.
+Use a plain for loop. "It went high" is a weaker claim than "it went high
 exactly once", and the difference is the entire lesson.
 
 Widths — `len(dut.some_bus)` gives the width off the port. Never hardcode it.
