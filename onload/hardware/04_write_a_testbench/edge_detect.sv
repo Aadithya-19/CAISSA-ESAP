@@ -16,6 +16,11 @@ for millions of clocks; the FSM wants to be kicked exactly once.
 
 The trick is one register. Remember what din was last cycle, and a rising
 edge is "high now, low then".
+
+`rise` is registered rather than combinational, so it is stable for a whole
+clock cycle. That is partly good practice and partly a favour to you: a
+combinational pulse lives *between* edges, and a testbench that samples
+after each edge would never see it.
 */
 
 module edge_detect (
@@ -28,10 +33,13 @@ module edge_detect (
     logic prev;
 
     always_ff @(posedge clk or negedge rst_n) begin
-        if (!rst_n) prev <= 1'b0;
-        else        prev <= din;
+        if (!rst_n) begin
+            prev <= 1'b0;
+            rise <= 1'b0;
+        end else begin
+            prev <= din;
+            rise <= din & ~prev;
+        end
     end
-
-    assign rise = din & ~prev;
 
 endmodule
