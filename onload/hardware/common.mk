@@ -5,16 +5,19 @@ TOPLEVEL_LANG ?= verilog   # cocotb's VPI switch, not the dialect. RTL stays .sv
 SOLUTION ?= 0
 
 ifeq ($(SOLUTION),1)
+  VARIANT := solution
   VERILOG_SOURCES := $(CURDIR)/solution/$(TOPLEVEL).sv
-  SIM_BUILD := sim_build/solution
 else
+  VARIANT := yours
   VERILOG_SOURCES := $(CURDIR)/$(TOPLEVEL).sv
-  SIM_BUILD := sim_build/yours
 endif
 
-# separate build dirs on purpose. sharing one meant `make solution` left a
-# compiled binary behind and the next plain `make` reused it - your unfilled
-# module would pass because you were running the answer.
+# Build dir is keyed on the variant AND the parameters. Both matter:
+# a shared dir meant `make solution` left a binary behind that the next
+# plain `make` reused, so an unfilled module passed. The parameter half
+# is the same trap - `make N=8` would rerun the N=64 build.
+PARAM_TAG := $(shell echo '$(COMPILE_ARGS)' | tr -cd 'A-Za-z0-9=' | tr '=' '-')
+SIM_BUILD := sim_build/$(VARIANT)$(if $(PARAM_TAG),_$(PARAM_TAG),)
 
 # unreset registers read 0 in verilator, so a missing reset slips through
 EXTRA_ARGS += --x-assign unique --x-initial unique
