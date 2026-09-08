@@ -37,7 +37,7 @@ module clipped_relu #(
 
     // MAX is the biggest value we let through. Don't hardcode 127 below -
     // the testbench builds this module at other widths on purpose.
-    localparam int MAX = (1 << (OUT_W - 1)) - 1;
+    localparam logic signed [IN_W-1:0] MAX = (1 << (OUT_W - 1)) - 1;
 
     always_comb begin
 

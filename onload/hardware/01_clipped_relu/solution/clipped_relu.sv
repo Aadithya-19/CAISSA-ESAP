@@ -17,7 +17,7 @@ module clipped_relu #(
     output logic        [OUT_W-1:0] dout
 );
 
-    localparam int MAX = (1 << (OUT_W - 1)) - 1;
+    localparam logic signed [IN_W-1:0] MAX = (1 << (OUT_W - 1)) - 1;
 
     always_comb begin
         if (din < 0)
