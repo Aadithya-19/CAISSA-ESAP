@@ -4,12 +4,28 @@ SIM ?= verilator
 TOPLEVEL_LANG ?= verilog   # cocotb's VPI switch, not the dialect. RTL stays .sv
 SOLUTION ?= 0
 
-ifeq ($(SOLUTION),1)
-  VARIANT := solution
-  VERILOG_SOURCES := $(CURDIR)/solution/$(TOPLEVEL).sv
-else
-  VARIANT := yours
+LESSON_KIND ?= rtl
+
+ifeq ($(LESSON_KIND),tb)
+  # The RTL is given; the testbench is the exercise. Same .sv either way,
+  # `solution` just points cocotb at the reference python module.
   VERILOG_SOURCES := $(CURDIR)/$(TOPLEVEL).sv
+  ifeq ($(SOLUTION),1)
+    VARIANT := solution
+    MODULE  := $(MODULE_REF)
+    export PYTHONPATH := $(CURDIR)/solution:$(PYTHONPATH)
+  else
+    VARIANT := yours
+    MODULE  := $(MODULE_YOURS)
+  endif
+else
+  ifeq ($(SOLUTION),1)
+    VARIANT := solution
+    VERILOG_SOURCES := $(CURDIR)/solution/$(TOPLEVEL).sv
+  else
+    VARIANT := yours
+    VERILOG_SOURCES := $(CURDIR)/$(TOPLEVEL).sv
+  endif
 endif
 
 # Build dir is keyed on the variant AND the parameters. Both matter:
