@@ -21,6 +21,18 @@ def widths(dut):
     return len(dut.a), len(dut.b), len(dut.acc)
 
 
+def ranges(dut):
+    """the biggest and smallest each port can actually hold"""
+    a_w, b_w, _ = widths(dut)
+    return (-(1 << (a_w - 1)), (1 << (a_w - 1)) - 1,
+            -(1 << (b_w - 1)), (1 << (b_w - 1)) - 1)
+
+
+def fits(value, lo, hi):
+    """clamp a chosen literal into what the port can take"""
+    return max(lo, min(hi, value))
+
+
 def as_signed(value, bits):
     """cocotb hands back raw bits; interpret them two's complement"""
     if value >= (1 << (bits - 1)):
@@ -66,9 +78,14 @@ async def test_reset_clears(dut):
 @cocotb.test()
 async def test_single_product(dut):
     """clr starts a fresh dot product with just this term"""
+    a_lo, a_hi, b_lo, b_hi = ranges(dut)
+    a, b = fits(7, a_lo, a_hi), fits(6, b_lo, b_hi)
+
     await start(dut)
-    await term(dut, 7, 6, clr=1)
-    assert read_acc(dut) == 42, f"7*6 should be 42, got {read_acc(dut)}"
+    await term(dut, a, b, clr=1)
+    assert read_acc(dut) == a * b, (
+        f"{a}*{b} should be {a*b}, got {read_acc(dut)}"
+    )
 
 
 @cocotb.test()
@@ -87,15 +104,21 @@ async def test_negatives(dut):
         "a big positive number here means the operands were treated unsigned."
     )
 
-    await term(dut, -8, 3, clr=1)
-    assert read_acc(dut) == -24, f"-8 * 3 should be -24, got {read_acc(dut)}"
+    a_lo, a_hi, b_lo, b_hi = ranges(dut)
+    a, b = a_lo, fits(3, b_lo, b_hi)
+    await term(dut, a, b, clr=1)
+    assert read_acc(dut) == a * b, (
+        f"{a} * {b} should be {a*b}, got {read_acc(dut)}"
+    )
 
 
 @cocotb.test()
 async def test_accumulates(dut):
     """a real dot product: clr on the first term, en on the rest"""
     await start(dut)
-    pairs = [(3, 4), (-2, 5), (7, -1), (6, 6)]
+    a_lo, a_hi, b_lo, b_hi = ranges(dut)
+    pairs = [(fits(x, a_lo, a_hi), fits(y, b_lo, b_hi))
+             for x, y in [(3, 4), (-2, 5), (7, -1), (6, 6)]]
 
     running = 0
     for i, (a, b) in enumerate(pairs):
@@ -109,12 +132,15 @@ async def test_accumulates(dut):
 @cocotb.test()
 async def test_holds_when_disabled(dut):
     """with clr and en both low the accumulator does not move"""
+    a_lo, a_hi, b_lo, b_hi = ranges(dut)
+
     await start(dut)
-    await term(dut, 9, 9, clr=1)
+    await term(dut, a_hi, b_hi, clr=1)
     before = read_acc(dut)
 
+    # keep driving the widest values the ports allow; nothing should move
     for _ in range(5):
-        await term(dut, 100, 100, clr=0, en=0)
+        await term(dut, a_lo, b_lo, clr=0, en=0)
     assert read_acc(dut) == before, (
         f"acc moved from {before} to {read_acc(dut)} with en low"
     )
