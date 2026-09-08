@@ -43,10 +43,7 @@ lint:
 LESSONS := $(sort $(wildcard onload/hardware/0*))
 
 lesson:
-	@for d in $(LESSONS); do 
-	  echo "== $$d"; 
-	  $(MAKE) --no-print-directory -C $$d solution || exit 1; 
-	done
+	@for d in $(LESSONS); do echo "== $$d"; $(MAKE) --no-print-directory -C $$d solution || exit 1; done
 
 clean:
 	rm -rf sim_build .pytest_cache onload/hardware/sim_build
