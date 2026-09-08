@@ -34,6 +34,8 @@ async def test_pulses_on_rising_edge(dut):
     """
     STEP 2 - the thing the module is for.
 
+    Every test starts with `await start(dut)`.
+
     Take din from 0 to 1 and check rise goes high for exactly one cycle.
     "Exactly one" is the part worth testing - count the cycles it is high
     rather than just checking it went high at all.
@@ -45,6 +47,8 @@ async def test_pulses_on_rising_edge(dut):
 async def test_ignores_a_held_high_input(dut):
     """
     STEP 3 - the bug this module exists to prevent.
+
+    Every test starts with `await start(dut)`.
 
     Hold din high for ten clocks. rise should fire once, on the first edge,
     and stay low for the rest. If your test passes with a module that just
@@ -58,6 +62,8 @@ async def test_ignores_the_falling_edge(dut):
     """
     STEP 4 - the other half.
 
+    Every test starts with `await start(dut)`.
+
     Bring din back down to 0. rise must not fire.
     """
     raise NotImplementedError("write me")
@@ -67,6 +73,8 @@ async def test_ignores_the_falling_edge(dut):
 async def test_reset_clears_history(dut):
     """
     STEP 5 - the one people forget.
+
+    Every test starts with `await start(dut)`.
 
     The module remembers what din was last cycle. Assert rst_n while din is
     high, release it, and decide for yourself what SHOULD happen on the next

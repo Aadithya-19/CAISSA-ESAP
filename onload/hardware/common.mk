@@ -8,15 +8,15 @@ LESSON_KIND ?= rtl
 
 ifeq ($(LESSON_KIND),tb)
   # The RTL is given; the testbench is the exercise. Same .sv either way,
-  # `solution` just points cocotb at the reference python module.
+  # `solution` just runs solution/<MODULE>_ref.py instead of yours. The _ref
+  # suffix shows up in the results table so you can see which one ran.
   VERILOG_SOURCES := $(CURDIR)/$(TOPLEVEL).sv
   ifeq ($(SOLUTION),1)
     VARIANT := solution
-    MODULE  := $(MODULE_REF)
+    MODULE  := $(MODULE)_ref
     export PYTHONPATH := $(CURDIR)/solution:$(PYTHONPATH)
   else
     VARIANT := yours
-    MODULE  := $(MODULE_YOURS)
   endif
 else
   ifeq ($(SOLUTION),1)
