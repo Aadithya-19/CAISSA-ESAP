@@ -5,7 +5,7 @@ SHELL = /bin/bash
 #   make module_foo    new module + testbench (add SUB_DIR=nnue to nest it)
 #   make test          run every testbench
 #   make test_foo      run one
-#   make waves_foo     run one, dump an FST
+#   make waves_foo     run one, dump a waveform
 #   make lint          verilator over rtl/
 #   make lesson        check the onboarding lesson still passes
 #   make clean
