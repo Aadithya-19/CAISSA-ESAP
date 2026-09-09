@@ -5,7 +5,7 @@ SHELL = /bin/bash
 #   make module_foo    new module + testbench (add SUB_DIR=nnue to nest it)
 #   make test          run every testbench
 #   make test_foo      run one
-#   make waves_foo     run one, dump an FST
+#   make waves_foo     run one, dump a waveform
 #   make lint          verilator over rtl/
 #   make lesson        check the onboarding lesson still passes
 #   make clean
@@ -40,8 +40,11 @@ lint:
 	  verilator --lint-only -Wall $(LINT_INC) "$$f" || exit 1; \
 	done
 
+LESSONS := $(sort $(wildcard onload/hardware/0*))
+
 lesson:
-	@$(MAKE) --no-print-directory -C onload/hardware solution
+	@for d in $(LESSONS); do echo "== $$d"; $(MAKE) --no-print-directory -C $$d solution || exit 1; done
 
 clean:
-	rm -rf sim_build .pytest_cache onload/hardware/sim_build
+	rm -rf sim_build .pytest_cache onload/hardware/*/sim_build
+	rm -f onload/hardware/*/results.xml onload/hardware/*/*.vcd

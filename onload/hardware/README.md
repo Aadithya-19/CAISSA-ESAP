@@ -1,46 +1,33 @@
-Lesson 02 — Serial to Parallel Shift Register
+Hardware onboarding
 
-Run everything below inside the environment: `pixi shell -e rtl` first,
-or prefix each command with `pixi run -e rtl`.
+Numbered lessons. Do them in order — each one assumes the one before it.
 
-~45 min. You build stp_sr.sv, the register that reassembles our 64 sensor bits.
+    pixi shell -e rtl        # everything below needs this
+    cd 01_clipped_relu
+    make
 
-Open stp_sr.sv, fill in the two holes.
-make
-Repeat until green.
+Every lesson works the same way: open the .sv, fill in the holes, run make
+until it is green. `make solution` shows the reference once you are done, or
+after 30 minutes of being stuck. Being stuck for 30 minutes on your first
+shift register is normal.
 
-You don't edit test_stp_sr.py — but do read it. In Lesson 04 you write one.
+    01_clipped_relu       combinational logic. no clock.
+    02_stp_sr             your first register. clocks and reset.
+    03_sensor_scan_fsm    state machines and counters.
+    04_write_a_testbench  the RTL is given. you write the tests.
+    05_weight_rom         on-chip memory and its one cycle of latency.
+    06_mac_unit           signed arithmetic. the DSP48 budget.
+    07_mac_pipe           pipelining, and what a systolic array is.
 
-bash
-make              # test your code
-make WIDTH=12     # rebuild 12-bit — catches hardcoded 8s
-make solution     # the reference, once you're done
-make waves        # waveform in GTKWave
+01 through 03 are modules this project actually needs — the sensor chain and
+the activation function. 04 is the skill everything after it depends on.
+05 through 07 build the evaluation datapath one piece at a time, and by the
+end of 07 you have built one cell of what becomes the MAC array.
 
-Stuck 30 minutes? Open solution/. That's normal for a first shift register.
+Every lesson takes parameters. `make WIDTH=12`, `make N=8`, `make A_W=4` and
+so on rebuild at a different size, and the tests still have to pass. That is
+deliberate: hardcoding a width is the most common bug in this codebase's
+target audience, and running at a second size is how you catch it.
 
-Reference notes
-
-Only read the one you need.
-
-always_ff vs always_comb — always_comb describes wires: output follows input continuously, no memory. always_ff @(posedge clk) describes flip-flops: they hold a value until a clock edge tells them to grab a new one. A shift register has to remember bits between edges.
-
-<= vs = — inside always_ff, always <=. Real flip-flops all sample at the same instant and read their neighbours' old values. <= models that. = runs top-to-bottom like C, so bit 0 gets bit 1's new value and your 8-bit register collapses to a 1-bit one. It simulates fine and looks almost right. This is the single most common Verilog bug.
-
-Concatenation — {a, b} glues vectors, MSB left. {2'b10, 2'b11} is 4'b1011. Lets you write a shift in one line instead of a loop.
-
-Active-low reset — rst_n == 0 means reset is happening. Looks backwards; it's convention, not a typo. Reset is checked first inside the block.
-
-Async reset — @(posedge clk or negedge rst_n) makes reset take effect the instant it's asserted, without waiting for a clock. Matters at power-on when the clock may not be running yet.
-
-Break it on purpose
-
-After your tests pass. Two minutes each, and each one is a bug you'd otherwise meet at 1am in the lab.
-
-1. Change <= to =. Run make waves and watch the register collapse in GTKWave. Put it back.
-
-2. Drop or negedge rst_n from the sensitivity list. Three tests pass, one fails. Which, and why? Put it back.
-
-3. Swap the concatenation to {serial_in, parallel_out[WIDTH-1:1]}. Still a real shift register — it just shifts the other way. It fails because the 74HC165 sends MSB first. Correct means matching the datasheet of the chip on the other end of the wire, not working in isolation.
-
-Next: Lesson 03 wraps this in the FSM that drives the 74HC165's PL and CLK pins and counts out 64 bits. That FSM plus this register is sensor_matrix_reader.sv — a module that ships, not an exercise.
+If a lesson references a file that does not exist, that is a bug. Open an
+issue; it blocks everyone behind you.
