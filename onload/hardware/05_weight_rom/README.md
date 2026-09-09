@@ -10,6 +10,13 @@ Open weight_rom.sv, fill in the three holes.
     make solution
     make waves
 
+About weights.hex
+
+It is generated, not committed. gen_weights.py rebuilds it to match DEPTH and
+WIDTH every time you run make, because a fixed file only works at one size:
+too many lines and $readmemh overruns the array, too few bits per line and
+every value silently truncates.
+
 Reference notes
 
 Unpacked arrays — `logic [WIDTH-1:0] mem [DEPTH];` reads awkwardly. The part
