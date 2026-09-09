@@ -46,4 +46,5 @@ lesson:
 	@for d in $(LESSONS); do echo "== $$d"; $(MAKE) --no-print-directory -C $$d solution || exit 1; done
 
 clean:
-	rm -rf sim_build .pytest_cache onload/hardware/sim_build
+	rm -rf sim_build .pytest_cache onload/hardware/*/sim_build
+	rm -f onload/hardware/*/results.xml onload/hardware/*/*.vcd

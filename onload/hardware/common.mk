@@ -40,7 +40,9 @@ EXTRA_ARGS += --x-assign unique --x-initial unique
 EXTRA_ARGS += -Wall -Wno-UNUSEDSIGNAL -Wno-UNUSEDPARAM
 
 ifeq ($(WAVES),1)
-  EXTRA_ARGS += --trace-fst --trace-structs
+  # VCD not FST: verilator's FST writer needs lz4 headers that the
+  # conda-forge build does not ship. GTKWave reads both.
+  EXTRA_ARGS += --trace --trace-structs
 endif
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
