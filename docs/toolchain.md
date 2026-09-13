@@ -59,7 +59,7 @@ Check your quota first, pixi caches into your home directory:
 quota -s
 ```
 
-Copy `.fst` files to your own machine to view waveforms. Waveform viewers over ThinLinc are slow enough that you'll stop using them.
+Copy the `.vcd` files to your own machine to view waveforms. Waveform viewers over ThinLinc are slow enough that you'll stop using them.
 
 ## Vivado
 
