@@ -79,7 +79,7 @@ Programming the Arty needs USB, so it happens on a lab machine. One board, sched
 | Track | Needs |
 |---|---|
 | ML | pixi, any OS |
-| RTL | pixi on Linux or mac, WSL2 on Windows |
+| RTL | pixi on Linux or Intel mac. WSL2 on Windows, Codespaces on Apple Silicon |
 | Firmware | pixi |
 | Mechanical | KiCad — free download or ThinLinc |
 
@@ -111,6 +111,16 @@ networkingMode=mirrored
 then `wsl --shutdown`. Mirrored mode shares the Windows network stack, VPN
 included. It can occasionally upset Docker Desktop.
 
-**`pixi run lesson` says the environment isn't available** - you're on native
-Windows or an Apple Silicon Mac. cocotb only ships linux-64 and osx-64 on
-conda-forge. Use WSL2 or ThinLinc.
+**`pixi run lesson` says the environment isn't available** - you are on an
+Apple Silicon Mac or native Windows.
+
+cocotb has no build for either. Not on conda-forge, and for Apple Silicon not
+even as a wheel on PyPI. Verilator itself runs fine on both; cocotb is what
+stops us.
+
+    Apple Silicon Mac   use Codespaces, or ThinLinc if you are ECE
+    Intel Mac           works natively, nothing to do
+    Windows             use WSL2, see the Windows section above
+
+Codespaces is the green Code button on the repo. It runs Linux, so everything
+works, and the free hours cover the onboarding lessons comfortably.
