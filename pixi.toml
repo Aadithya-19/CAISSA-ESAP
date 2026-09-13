@@ -16,8 +16,11 @@ pytest = ">=8.0"
 [feature.ml.tasks]
 ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
 
-# cocotb only ships linux-64 and osx-64 on conda-forge. no windows, no apple
-# silicon - both of those do RTL work in WSL2 or on ThinLinc.
+# cocotb has no build for win-64 or osx-arm64 - not on conda-forge, and for
+# apple silicon not even a wheel on pypi. verilator runs on both, cocotb is
+# what stops us. windows -> WSL2, apple silicon -> codespaces or thinlinc.
+# cocotb 2.x does have arm64 wheels; moving to it is a real migration and
+# is tracked separately.
 [feature.rtl]
 platforms = ["linux-64", "osx-64"]
 
