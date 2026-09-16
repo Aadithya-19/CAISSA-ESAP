@@ -1,6 +1,6 @@
 """
 CAISSA Onboarding-Synth training
-code.py - turning a board into numbers
+features.py - turning a board into numbers
 
 ok so the network cant look at a chess board. it looks at numbers. so we have
 to flatten the position into something it can actually understand.
@@ -99,7 +99,7 @@ def feature_index(color: bool, piece_type: int, square: int) -> int:
     raise NotImplementedError("STEP 3: return the sum")
 
 
-def code(board: chess.Board) -> list[int]:
+def active_features(board: chess.Board) -> list[int]:
     """
     take a whole board and give back the sorted list of indexes that are "yes".
 
@@ -120,15 +120,15 @@ def code(board: chess.Board) -> list[int]:
 
 
     # STEP 3 - sort it before returning.
-    # the tests check for this, but the real reason is lesson 04. when you want
+    # the tests check for this, but the real reason is lesson 02. when you want
     # to diff two positions and find what changed, two sorted lists are easy
     # and two randomly ordered ones are a headache.
     raise NotImplementedError("STEP 3: return the sorted list")
 
 
 if __name__ == "__main__":
-    # quick eyeball check, run:  python code.py
+    # quick eyeball check, run:  python features.py
     board = chess.Board()
-    active = code(board)
+    active = active_features(board)
     print(f"starting position -> {len(active)} pieces found")
     print(active)
