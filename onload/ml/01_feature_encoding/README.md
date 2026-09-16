@@ -25,6 +25,6 @@ Break it on purpose
 1. Drop the -1 on piece_type. Which test catches it first, and what index
    does a black king on h8 get?
 
-2. Remove the sort. Only one test fails. Lesson 02 is why it matters anyway.
+2. Remove the sort. Two tests fail. Lesson 02 is why the order matters at all.
 
 Next: Lesson 02 works out which of these 768 change when a piece moves.
