@@ -24,3 +24,14 @@ jobs:
       # a broken onboarding lesson blocks every new member, so it fails CI too
       - name: lesson
         run: pixi run lesson
+
+  ml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: prefix-dev/setup-pixi@v0.10.2
+
+      # every ml lesson's reference must pass. exercises are meant to fail.
+      - name: ml lessons
+        run: pixi run ml-solution

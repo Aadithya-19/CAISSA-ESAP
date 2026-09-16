@@ -14,7 +14,8 @@ chess = ">=1.11"
 pytest = ">=8.0"
 
 [feature.ml.tasks]
-ml-test = { cmd = "pytest -q", cwd = "onload/ml" }
+ml-test = { cmd = "pytest -q", cwd = "onload/ml" }                                  # your code
+ml-solution = { cmd = "pytest -q", cwd = "onload/ml", env = { SOLUTION = "1" } }  # the reference
 
 # cocotb has no build for win-64 or osx-arm64 - not on conda-forge, and for
 # apple silicon not even a wheel on pypi. verilator runs on both, cocotb is
