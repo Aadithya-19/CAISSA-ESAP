@@ -12,6 +12,7 @@ python = "3.12.*"
 numpy = ">=2.0,<3"
 chess = ">=1.11"
 pytest = ">=8.0"
+zstandard = ">=0.25.0,<0.26"
 
 [feature.ml.tasks]
 ml-test = { cmd = "pytest -q", cwd = "onload/ml" }                                  # your code
