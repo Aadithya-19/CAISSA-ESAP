@@ -1,18 +1,12 @@
-# TODO: still missing real handles for Dhruv, Anya, Leo, Amy — placeholders below
-# marked FIXME. Update the moment they reply, or those lines route to nobody.
-
 *                       @Aadithya-19 @Astromonkey2
 
-/ml/                    @ArvindS2313 @Aadithya-19 @ishikapandura @ilim-stankulov
+/ml/                    @ArvindS2313 @ishikapandura @ilim-stankulov @Aadithya-19 @Astromonkey2
+/rtl/                   @Kade-Zisko @chihieugithub @tseng104 @Aadithya-19 @Astromonkey2
+/embedded/              @T1M1D0 @Gabo7211 @Aadithya-19 @Astromonkey2
+/mech/                  @solo6760 @Aadithya-19 @Astromonkey2
 
-/rtl/                   @Kade-Zisko @Astromonkey2 @chihieugithub @tseng104
-
-/embedded/              @T1M1D0 @Gabo7211
-
-/mech/                  @Aadithya-19 @solo6760 @Astromonkey2
-
-/docs/eval-spec.md              @solo6760 @Aadithya-19
-/docs/mechanical-constraints.md @Aadithya-19
+/docs/eval-spec.md              @solo6760 @Aadithya-19 @Astromonkey2
+/docs/mechanical-constraints.md @Aadithya-19 @Astromonkey2
 /docs/port-contracts.md         @Aadithya-19 @Astromonkey2
 
-/.github/               @Aadithya-19
+/.github/               @Aadithya-19 @Astromonkey2
