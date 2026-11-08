@@ -13,11 +13,16 @@ module flexFIFO #(
     output logic empty,
     output logic valid_read
 );
-
-    localparam int PTR_W = $clog2(WIDTH);
     logic [I_SIZE-1:0] regs [WIDTH-1:0];
-    logic [PTR_W:0] rp, wp;
+    logic [I_SIZE-1:0] next_regs [WIDTH-1:0];
+    logic [$clog2(WIDTH)-1:0] rp, wp;
 
-    
+    always_ff @(posedge clk, negedge n_rst) begin
+        if(!n_rst) begin
+            regs <= 
+        end else begin
+
+        end
+    end
 
 endmodule
