@@ -12,6 +12,8 @@ SHELL = /bin/bash
 
 SUB_DIR ?=
 LINT_INC := $(addprefix -y ,$(shell find rtl -type d 2>/dev/null))
+PKGS := $(shell find rtl -name '*_pkg.sv' 2>/dev/null)
+LINT_CFG := scripts/lint.vlt
 
 .DEFAULT_GOAL := help
 .PHONY: help test waves lint lesson clean
@@ -35,9 +37,13 @@ waves_%:
 	pytest tb/ -k "$*" --waves
 
 lint:
-	@for f in $$(find rtl -name '*.sv'); do \
+	@for p in $(PKGS); do \
+	  echo "lint $$p"; \
+	  verilator --lint-only -Wall $(LINT_CFG) "$$p" || exit 1; \
+	done
+	@for f in $$(find rtl -name '*.sv' ! -name '*_pkg.sv'); do \
 	  echo "lint $$f"; \
-	  verilator --lint-only -Wall $(LINT_INC) "$$f" || exit 1; \
+	  verilator --lint-only -Wall $(LINT_CFG) $(LINT_INC) $(PKGS) "$$f" || exit 1; \
 	done
 
 LESSONS := $(sort $(wildcard onload/hardware/0*))
