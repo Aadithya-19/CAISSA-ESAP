@@ -12,6 +12,7 @@ SHELL = /bin/bash
 
 SUB_DIR ?=
 LINT_INC := $(addprefix -y ,$(shell find rtl -type d 2>/dev/null))
+PKGS := $(shell find rtl -name '*_pkg.sv' 2>/dev/null)
 
 .DEFAULT_GOAL := help
 .PHONY: help test waves lint lesson clean
@@ -35,7 +36,11 @@ waves_%:
 	pytest tb/ -k "$*" --waves
 
 lint:
-	@for f in $$(find rtl -name '*.sv'); do \
+	@for p in $(PKGS); do \
+	  echo "lint $$p"; \
+	  verilator --lint-only -Wall -Wno-UNUSEDPARAM "$$p" || exit 1; \
+	done
+	@for f in $$(find rtl -name '*.sv' ! -name '*_pkg.sv'); do \
 	  echo "lint $$f"; \
 	  verilator --lint-only -Wall $(LINT_INC) "$$f" || exit 1; \
 	done
