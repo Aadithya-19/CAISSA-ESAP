@@ -13,14 +13,15 @@ import numpy as np
 import torch
 from torch import nn
 
-from ml.encoding import active_features, features
+from encoding import active_features, features
 
 MATE_SCORE = 10_000
 HIDDEN_SIZE = 64
 INT16_MIN, INT16_MAX = -(1 << 15), (1 << 15) - 1
 INT32_MIN, INT32_MAX = -(1 << 31), (1 << 31) - 1
 OUT_BIAS_LIMIT = (1 << 23) - 1
-
+OUTPUT_SHIFT = 3
+OUTPUT_SCALE = 1 << OUTPUT_SHIFT
 
 def _score_target(record: dict[str, Any], mate_score: int = MATE_SCORE) -> int:
     """Take the first PV score from the deepest analysis, in side-to-move POV."""
@@ -72,6 +73,12 @@ def _quantize_ste(value: torch.Tensor, low: int, high: int) -> torch.Tensor:
     return value + (quantized - value).detach()
 
 
+def _shift_right_ste(value: torch.Tensor, shift: int) -> torch.Tensor:
+    scaled = value / (1 << shift)
+    shifted = torch.floor(scaled)
+    return scaled + (shifted - scaled).detach()
+
+
 class QuantizedEvalNet(nn.Module):
     """Single-view 768-feature NNUE with integer-valued quantized forward passes."""
 
@@ -88,8 +95,8 @@ class QuantizedEvalNet(nn.Module):
     def forward(self, encoded: torch.Tensor) -> torch.Tensor:
         ft_w = _quantize_ste(self.ft_w, -128, 127)
         ft_b = _quantize_ste(self.ft_b, INT16_MIN, INT16_MAX)
-        out_w = _quantize_ste(self.out_w, -128, 127)
-        out_b = _quantize_ste(self.out_b, -OUT_BIAS_LIMIT, OUT_BIAS_LIMIT)
+        out_w = _quantize_ste(self.out_w * OUTPUT_SCALE, -128, 127)
+        out_b = _quantize_ste(self.out_b * OUTPUT_SCALE, -OUT_BIAS_LIMIT, OUT_BIAS_LIMIT)
 
         accumulator = encoded @ ft_w.t() + ft_b
         if torch.any((accumulator < INT16_MIN) | (accumulator > INT16_MAX)).item():
@@ -98,7 +105,7 @@ class QuantizedEvalNet(nn.Module):
         result = activation @ out_w + out_b
         if torch.any((result < INT32_MIN) | (result > INT32_MAX)).item():
             raise OverflowError("output accumulator does not fit int32")
-        return result
+        return _shift_right_ste(result, OUTPUT_SHIFT)
 
     def export_integer_weights(self) -> dict[str, np.ndarray | int]:
         """Return the exact integer parameters used by the quantized forward pass."""
@@ -106,9 +113,9 @@ class QuantizedEvalNet(nn.Module):
             return {
                 "ft_w": self.ft_w.round().clamp(-128, 127).to(torch.int8).cpu().numpy(),
                 "ft_b": self.ft_b.round().clamp(INT16_MIN, INT16_MAX).to(torch.int16).cpu().numpy(),
-                "out_w": self.out_w.round().clamp(-128, 127).to(torch.int8).cpu().numpy(),
-                "out_b": int(self.out_b.round().clamp(-OUT_BIAS_LIMIT, OUT_BIAS_LIMIT).item()),
-                "shift": 0,
+                "out_w": (self.out_w * OUTPUT_SCALE).round().clamp(-128, 127).to(torch.int8).cpu().numpy(),
+                "out_b": int((self.out_b * OUTPUT_SCALE).round().clamp(-OUT_BIAS_LIMIT, OUT_BIAS_LIMIT).item()),
+                "shift": OUTPUT_SHIFT,
             }
 
 
@@ -223,7 +230,7 @@ def save_integer_model(model: QuantizedEvalNet, path: str | Path) -> None:
         out_b=np.int32(net["out_b"]),
         shift=np.int32(net["shift"]),
     )
-    
+
 
 def load_integer_model(path: str | Path) -> dict[str, Any]:
     with np.load(path, allow_pickle=False) as archive:
