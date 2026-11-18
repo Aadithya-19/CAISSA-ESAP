@@ -33,6 +33,7 @@ pytest-xdist = ">=3.0"     # pytest -n auto
 make = "*"
 verilator = ">=5.020,<6"   # thinlinc has 5.026, pin to match once checked
 yosys = ">=0.40"
+chess = ">=1.11"
 
 [feature.rtl.target.linux-64.dependencies]
 gtkwave = "*"              # linux only on conda-forge
