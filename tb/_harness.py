@@ -15,7 +15,7 @@ RTL = TB.parent / "rtl"
 
 # verilator is 2-state, so an unreset register reads 0 instead of X and a
 # missing reset passes by accident. these make it fail instead.
-BUILD_ARGS = ["--x-assign", "unique", "--x-initial", "unique", "-Wall"]
+BUILD_ARGS = ["--x-assign", "unique", "--x-initial", "unique", "-Wall", str(TB.parent / "scripts" / "lint.vlt")]
 
 
 def run(toplevel, sources, parameters=None, waves=False):
@@ -41,8 +41,7 @@ def run(toplevel, sources, parameters=None, waves=False):
         hdl_toplevel=toplevel,
         parameters=parameters,
         build_dir=build_dir,
-        test_dir=TB,
-        # without this cocotb drops a "<testname>.None" file next to the tests
-        results_xml=str(build_dir / "results.xml"),
+        test_dir=build_dir,
+        plusargs=["+verilator+rand+reset+2"],
         waves=waves,
     )
