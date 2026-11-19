@@ -68,6 +68,27 @@ package caissa_pkg;
     localparam piece_t B_QUEEN = 4'b1101;
     localparam piece_t B_KING = 4'b1110;
 
+    localparam logic [2:0] FILE_A = 3'd0;
+    localparam logic [2:0] FILE_B = 3'd1;
+    localparam logic [2:0] FILE_C = 3'd2;
+    localparam logic [2:0] FILE_D = 3'd3;
+    localparam logic [2:0] FILE_E = 3'd4;
+    localparam logic [2:0] FILE_F = 3'd5;
+    localparam logic [2:0] FILE_G = 3'd6;
+    localparam logic [2:0] FILE_H = 3'd7;
+    localparam square_t SQ_A1 = 6'd0;
+    localparam square_t SQ_H1 = 6'd7;
+    localparam square_t SQ_A8 = 6'd56;
+    localparam square_t SQ_H8 = 6'd63;
+
+    localparam logic [255:0] START_BOARD = {
+        B_ROOK, B_KNIGHT, B_BISHOP, B_KING, B_QUEEN, B_BISHOP, B_KNIGHT, B_ROOK,
+        {8{B_PAWN}},
+        {32{EMPTY}},
+        {8{W_PAWN}},
+        W_ROOK, W_KNIGHT, W_BISHOP, W_KING, W_QUEEN, W_BISHOP, W_KNIGHT, W_ROOK
+    };
+
     typedef struct packed {
         logic [3:0] flags;
         square_t to;
@@ -95,6 +116,7 @@ package caissa_pkg;
     localparam int unsigned CASTLE_WQ = 1;
     localparam int unsigned CASTLE_BK = 2;
     localparam int unsigned CASTLE_BQ = 3;
+    localparam logic [3:0] START_CASTLE = 4'b1111;
 
     localparam int unsigned EP_VALID_BIT = 3;
 
