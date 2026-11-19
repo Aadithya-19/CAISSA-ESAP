@@ -42,5 +42,6 @@ def run(toplevel, sources, parameters=None, waves=False):
         parameters=parameters,
         build_dir=build_dir,
         test_dir=build_dir,
+        plusargs=["+verilator+rand+reset+2"],
         waves=waves,
     )
