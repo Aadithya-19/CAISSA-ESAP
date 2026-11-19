@@ -6,6 +6,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer
 
 INPUTS = ["new_game", "log_en", "apply_move", "log_rd_addr"]
+OUTPUTS = ["log_count", "log_rd_data"]
 
 SEED = int(os.environ.get("SEED", "2026"))
 LOG_MAX = 2047
@@ -59,18 +60,23 @@ async def log_all(dut, words):
 
 
 @cocotb.test()
-async def test_reset_clears_count(dut):
-    cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
+async def test_reset_outputs_zero(dut):
     for name in INPUTS:
         getattr(dut, name).value = 0
+    dut.n_rst.value = 1
+    await Timer(1, units="ns")
     dut.n_rst.value = 0
+    await Timer(1, units="ns")
+    cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
     for _ in range(3):
         await tick(dut)
-        assert count(dut) == 0, "log_count not 0 in reset"
+        for name in OUTPUTS:
+            assert int(getattr(dut, name).value) == 0, f"{name} not 0 in reset"
     dut.n_rst.value = 1
     for _ in range(5):
         await tick(dut)
-        assert count(dut) == 0, "log_count not 0 after reset"
+        for name in OUTPUTS:
+            assert int(getattr(dut, name).value) == 0, f"{name} not 0 after reset"
 
 
 @cocotb.test()
@@ -137,8 +143,25 @@ async def test_new_game_beats_log_en(dut):
     await tick(dut)
     dut.log_en.value = 0
     dut.new_game.value = 0
-    assert count(dut) == 0
-    assert await read(dut, 0) == 0x1234, "log_en wrote during new_game"
+    assert count(dut) == 0, "log_en counted during new_game"
+    await log_all(dut, [0x5678])
+    assert count(dut) == 1
+    assert await read(dut, 0) == 0x5678
+
+
+@cocotb.test()
+async def test_unlogged_reads_zero(dut):
+    await start(dut)
+    rng = random.Random(SEED + 4)
+    words = [rng.getrandbits(16) | 1 for _ in range(8)]
+    await log_all(dut, words)
+    for addr in range(len(words), len(words) + 6):
+        got = await read(dut, addr)
+        assert got == 0, f"entry {addr} past log_count reads 0x{got:04X}"
+    await new_game(dut)
+    for addr in range(len(words)):
+        got = await read(dut, addr)
+        assert got == 0, f"entry {addr} from the last game still reads 0x{got:04X}"
 
 
 @cocotb.test()

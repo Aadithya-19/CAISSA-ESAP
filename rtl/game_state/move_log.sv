@@ -40,7 +40,11 @@ module move_log
     end
 
     always_ff @(posedge clk) begin
-        log_rd_data <= mem[log_rd_addr];
+        if (log_rd_addr >= log_count) begin
+            log_rd_data <= '0;
+        end else begin
+            log_rd_data <= mem[log_rd_addr];
+        end
     end
 
 endmodule
