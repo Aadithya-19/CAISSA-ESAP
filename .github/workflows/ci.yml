@@ -35,3 +35,6 @@ jobs:
       # every ml lesson's reference must pass. exercises are meant to fail.
       - name: ml lessons
         run: pixi run ml-solution
+
+      - name: golden model
+        run: pixi run python -m pytest tests/test_golden_model.py ml/tests -q
