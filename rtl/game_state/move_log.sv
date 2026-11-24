@@ -11,10 +11,13 @@ module move_log
     output move_t log_rd_data
 );
 
-    move_t mem [LOG_DEPTH];
+    // plain 16 bit words instead of move_t. with the struct vivado split every
+    // field into its own ram and it came out to 1.5 BRAMs, this way it's exactly 1
+    logic [$bits(move_t)-1:0] mem [LOG_DEPTH];
     logic wr;
     logic [LOG_ADDR_W-1:0] next_count;
 
+    // stops writing once the log is full, and new_game wins over log_en
     always_comb begin
         wr = log_en && !new_game && log_count != LOG_ADDR_W'(LOG_MAX);
         next_count = log_count;
@@ -33,12 +36,15 @@ module move_log
         end
     end
 
+    // the ram itself never gets cleared, new_game just puts log_count back to 0
     always_ff @(posedge clk) begin
         if (wr) begin
             mem[log_count] <= apply_move;
         end
     end
 
+    // anything we haven't logged reads 0, so the output is 0 after reset and
+    // moves from the last game don't show up after new_game
     always_ff @(posedge clk) begin
         if (log_rd_addr >= log_count) begin
             log_rd_data <= '0;
