@@ -1,0 +1,32 @@
+{
+  "input_bits": 8,
+  "layers": [
+    {
+      "weights": [[127, 127, 127], [1, 1, 0], [0, 0, 0]],
+      "bias": [-3, 0, -3],
+      "weight_bits": 8,
+      "acc_bits": 16,
+      "shift": 1,
+      "clamp": [0, 127],
+      "output_bits": 8
+    },
+    {
+      "weights": [[1, 2, 1], [1, 1, 1]],
+      "bias": [5, 1],
+      "weight_bits": 8,
+      "acc_bits": 16,
+      "shift": 1,
+      "clamp": [0, 127],
+      "output_bits": 8
+    },
+    {
+      "weights": [[-2, 1]],
+      "bias": [1],
+      "weight_bits": 8,
+      "acc_bits": 16,
+      "shift": 2,
+      "clamp": null,
+      "output_bits": 16
+    }
+  ]
+}
