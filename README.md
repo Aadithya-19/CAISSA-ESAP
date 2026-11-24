@@ -52,3 +52,7 @@ There is one board. Hardware access is scheduled, not first-come.
 
 Two PMs. RTL and hardware architecture: Abhi. ML and training: Aadithya.
 Tracks: RTL, ML, firmware, mechanical.
+
+## Python golden model
+
+See [the golden-model guide](docs/golden-model.md) for the example, NPZ conversion, and Python tests.
